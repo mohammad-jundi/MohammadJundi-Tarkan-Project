@@ -1,0 +1,9 @@
+.madByMT {
+    text-align: center;
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: baseline;
+	align-content: center;
+}

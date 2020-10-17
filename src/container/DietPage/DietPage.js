@@ -4,7 +4,7 @@ import React from "react";
 import EditDiet from "../../components/EditDiet";
 import DietDetails from "../../components/DietDetails";
 import ManageDiet from "../../components/ManageDiet";
-import DietPageBackground from "../../images/DietPageBackground.jpg";
+import DietPageBackground from "../../images/mediterranean.jpg";
 import { Row } from "antd";
 import Chart from "../../components/Chart";
 
@@ -19,11 +19,13 @@ const editPageStyle = {
 };
 const DietPage = () => {
     return (
-        <Row style={editPageStyle}>
-            <ManageDiet />
-            <EditDiet />
-            <Chart />
-        </Row>
+        <div style={editPageStyle}>
+            <Row >
+                <ManageDiet />
+                <EditDiet />
+                <Chart />
+            </Row>
+        </div>
     );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Image, Divider, Space, Typography, Carousel } from "antd";
 
-import restaurant from "../images/HomePagebackground.jpg";
+import restaurant from "../images/food.jpg";
 import left1 from "../images/left1.png";
 import mid1 from "../images/mid1.png";
 import mid2 from "../images/mid2.png";

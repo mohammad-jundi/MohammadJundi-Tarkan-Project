@@ -1,0 +1,26 @@
+.container {
+    text-align: center;
+    color: white;
+    padding: 5%;
+}
+.title {
+    font-size: 4rem;
+    color: white;
+}
+
+.mohammad, .tarkan{
+    width: 8rem;
+    height: 8rem;
+    border-radius: 4rem;
+}
+.pics {
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: baseline;
+	align-content: center;
+}
+.createdBy {
+    color: white;
+}
