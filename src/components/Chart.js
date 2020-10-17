@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import { connect } from "react-redux";
+import { Card, Col, Divider } from "antd";
+import BarChart from "./BarChart";
 
 const Chart = selectedMeal => {
-    console.log(selectedMeal);
+    //console.log(selectedMeal);
     const [chartData, setChartData] = useState();
     const [selectedMealArr, setSelectedMealArr] = useState([]);
     const [calories, setCalories] = useState([]);
@@ -22,17 +24,21 @@ const Chart = selectedMeal => {
     }, [selectedMeal.mealsChartContent]);
 
     useEffect(() => {
-        setCalories(selectedMealArr.map(el => el.nutrientsConsumed.calories));
-        console.log(
-            "set calories",
-            selectedMealArr.map(el => el.nutrientsConsumed.calories)
+        setCalories(
+            selectedMealArr.map(el =>
+                el ? Math.round(el.nutrientsConsumed.calories) : ""
+            )
         );
+        //console.log(
+        //    "set calories",
+        //    selectedMealArr.map(el => el.nutrientsConsumed.calories)
+        //);
 
-        setMealNames(selectedMealArr.map(el => el.food_name));
-        console.log(
-            "selected meal arr",
-            selectedMealArr.map(el => el.food_name)
-        );
+        setMealNames(selectedMealArr.map(el => (el ? el.food_name : "")));
+        // console.log(
+        //     "selected meal arr",
+        //     selectedMealArr.map(el => el.food_name)
+        // );
     }, [selectedMealArr]);
 
     useEffect(() => {
@@ -60,37 +66,51 @@ const Chart = selectedMeal => {
             ],
         });
     }, [mealNames]);
-
-    return (
-        <div>
-            <div style={{ height: "400px" }}>
-                <Pie
-                    style={{ height: "100%" }}
-                    hover={true}
-                    data={chartData}
-                    options={{
-                        maintainAspectRatio: false,
-                        cutoutPercentage: 70,
-                        tooltips: {
-                            enabled: true,
-                        },
-                        responsive: true,
-                        title: { display: true, text: "Diet Details " },
-                        legend: {
-                            display: true,
-                            position: "bottom",
-                        },
-                    }}
-                />
-            </div>
-            <h2 style={{ textAlign: "center", marginTop: "-225px" }}>
-                Calories:{" "}
-                {calories.length > 0
-                    ? calories.reduce((acc, curr) => acc + curr)
-                    : ""}
-            </h2>
-        </div>
-    );
+    if (selectedMeal.mealsChartContent)
+        return (
+            <Col xs={24} sm={24} md={6} lg={8} xl={8} xxl={8}>
+                <div style={{ width: "100%", marginTop: "3.3vh" }}>
+                    <Card
+                        title={
+                            <Pie
+                                hover={true}
+                                data={chartData}
+                                options={{
+                                    maintainAspectRatio: false,
+                                    cutoutPercentage: 70,
+                                    tooltips: {
+                                        enabled: true,
+                                    },
+                                    responsive: true,
+                                    title: {
+                                        display: true,
+                                        text: "Diet Details ",
+                                    },
+                                    legend: {
+                                        display: true,
+                                        position: "bottom",
+                                    },
+                                }}
+                            />
+                        }
+                        bordered={false}
+                        style={{ width: "100%" }}
+                    >
+                        <h2 style={{ textAlign: "center" }}>
+                            Calories:{" "}
+                            {calories.length > 0
+                                ? calories.reduce((acc, curr) => acc + curr)
+                                : ""}
+                        </h2>
+                        <Divider />
+                        <BarChart chartData={chartData} />
+                    </Card>
+                </div>
+            </Col>
+        );
+    else {
+        return <div></div>;
+    }
 };
 
 const mapStateToProps = state => {

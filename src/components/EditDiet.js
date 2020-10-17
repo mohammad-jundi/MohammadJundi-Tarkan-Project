@@ -42,9 +42,6 @@ const { Title } = Typography;
 const { Option } = Select;
 
 const EditDiet = ({ selectedMeal, setMeal, addFood }) => {
-    useEffect(() => {
-        console.log("selectedMeal is", selectedMeal);
-    }, [selectedMeal]);
     const NUM_DESIRED_RESULTS = 5;
     //stores auto complete data
     const [options, setOptions] = useState([]);
@@ -147,6 +144,8 @@ const EditDiet = ({ selectedMeal, setMeal, addFood }) => {
                 console.log("selectedFoodName", selectedFoodName);
                 const details = await getDetails(selectedFoodName);
                 console.log("selected food details are", details);
+                //food like "eggo" doesnt have measures. it is not possible ot work with it
+
                 setFoodDetails(details);
             })();
         }
@@ -154,16 +153,18 @@ const EditDiet = ({ selectedMeal, setMeal, addFood }) => {
 
     // creates options for serving size
     useEffect(() => {
-        if (foodDetails) {
-            const measuresArr = foodDetails.alt_measures.map(measureObj => {
-                console.log("option created");
-                return (
-                    <Option value={measureObj.measure}>
-                        {measureObj.measure}
-                    </Option>
-                );
-            });
-
+        if (foodDetails && foodDetails.alt_measures) {
+            const measuresArr = foodDetails.alt_measures.map(
+                (measureObj, index) => {
+                    console.log("option created");
+                    return (
+                        <Option value={measureObj.measure} key={index}>
+                            {measureObj.measure}
+                        </Option>
+                    );
+                }
+            );
+            console.log("measuresArr", measuresArr);
             setServingOptions(measuresArr);
         }
     }, [foodDetails]);
@@ -174,7 +175,7 @@ const EditDiet = ({ selectedMeal, setMeal, addFood }) => {
 
     //this must be on snapshot  //if this works dont pass meal content with active meal
     useEffect(() => {
-        console.log("selected meal is", selectedMeal);
+        //console.log("selected meal is", selectedMeal);
         if (selectedMeal) {
             setActiveMealContent(Object.values(selectedMeal)[0]);
             setActiveMealName(Object.keys(selectedMeal)[0]);
@@ -188,7 +189,8 @@ const EditDiet = ({ selectedMeal, setMeal, addFood }) => {
         setAmount(value);
     };
 
-    const handleAddFood = () => {
+    const handleAddFood = e => {
+        e.target.reset();
         const copyOfFoodDetails = { ...foodDetails };
 
         //clears data
@@ -351,9 +353,10 @@ const EditDiet = ({ selectedMeal, setMeal, addFood }) => {
 
     useEffect(() => {
         if (editTarget) {
-            const newOptions = editTarget.alt_measures.map(type => {
+            const newOptions = editTarget.alt_measures.map((type, index) => {
+                console.log(type);
                 return (
-                    <Option value={type.measure} data={type}>
+                    <Option value={type.measure} data={type} key={index}>
                         {type.measure}
                     </Option>
                 );
@@ -473,7 +476,7 @@ const EditDiet = ({ selectedMeal, setMeal, addFood }) => {
     }, [sortType]);
 
     return (
-        <Col xs={24} sm={24} md={12} lg={12} xl={14} xxl={14}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
             <Row justify="center">
                 {activeMealName && activeMealContent ? (
                     <>
@@ -569,9 +572,10 @@ const EditDiet = ({ selectedMeal, setMeal, addFood }) => {
                                 <p>Deleted foods can't be recovered!</p>
                             </Modal>
                             <Row>
-                                {activeMealContent.map(food => {
+                                {activeMealContent.map((food, index) => {
                                     return (
                                         <Col
+                                            key={index}
                                             xs={24}
                                             sm={24}
                                             md={24}
